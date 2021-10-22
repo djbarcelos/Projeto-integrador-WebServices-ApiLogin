@@ -1,7 +1,6 @@
 
 const Login = require('../controllers/login.controllers');
 const authMiddleware = require('../controllers/middleware/auth');
-// const cors = require('../controllers/middleware/cors');
 
 module.exports = app => {
 

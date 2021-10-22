@@ -1,5 +1,5 @@
 {
-    "ENV_PORT" : 3002,
+    "ENV_PORT" : 3030,
     "AUTH_SECRET" : "b057387d-f8d0-412e-974d-c540bac6b3af"
 }
 

@@ -3,7 +3,7 @@ const configs = require('../../configs/config_server.json');
 
 module.exports = (req, res, next) => {
 
-    const authHeader = req.body.authorization;
+    const authHeader = req.headers.authorization;
     
     if (!authHeader)
         return res.status(401).send({

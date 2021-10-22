@@ -54,6 +54,7 @@ exports.REGISTER = async (req, res) => {
 
 exports.AUTHENTICATE = async (req, res) => {
     const { cpf, password } = req.body;
+    
     try {
         const user = await db.collection('users').findOne({ cpf });
 
@@ -90,7 +91,6 @@ exports.AUTHENTICATE = async (req, res) => {
 
 exports.FORGOT_PASSWORD = async (req, res) => {
     const { email } = req.body;
-
     try {
 
         const user = await db.collection('users').findOne({ email });
