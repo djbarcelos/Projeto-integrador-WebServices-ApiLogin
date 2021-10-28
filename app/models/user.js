@@ -6,7 +6,7 @@ const UserSchema = new Schema({
       type: String,
       require: true,
    },
-   surname: {
+   birthDate: {
       type: String,
       require: true,
    },
@@ -41,7 +41,43 @@ const UserSchema = new Schema({
    createdAt: {
       type: Date,
       default: Date.now,
-   }
+   },
+   myCalls: [
+      {
+         specialty: [
+            {
+               type: String,
+               lowercase: true
+            }
+         ],
+         date: {
+            type: Date,
+         },
+         schedule: {
+            type: String,
+            lowercase: true
+         },
+         states: {
+            state: {
+               type: String,
+               lowercase: true
+            },
+            updateLog: {
+               type: Date,
+            },
+            lastUpdateLog: {
+               type: Date,
+            },
+            calledoffLog: {
+               type: Date,
+            },
+         },
+         createdAt: {
+            type: Date,
+            default: Date.now,
+         },
+      }
+   ]
 });
 
 module.exports = mongoose.model('User', UserSchema);

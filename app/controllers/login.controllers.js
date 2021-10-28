@@ -54,7 +54,7 @@ exports.REGISTER = async (req, res) => {
 
 exports.AUTHENTICATE = async (req, res) => {
     const { cpf, password } = req.body;
-    
+
     try {
         const user = await db.collection('users').findOne({ cpf });
 
@@ -76,7 +76,6 @@ exports.AUTHENTICATE = async (req, res) => {
             {
                 message: 'success',
                 code: 200,
-                data: user,
                 token: generateToken({ id: user._id })
             }
         );
@@ -125,7 +124,7 @@ exports.FORGOT_PASSWORD = async (req, res) => {
                     code: 400
                 });
 
-            return res.send();
+            return res.status(200).send();
         })
 
     } catch (error) {
@@ -165,7 +164,7 @@ exports.RESET_PASSWORD = async (req, res) => {
 
         await db.collection('users').updateOne({ _id: user._id }, { $set: user });
 
-        res.send();
+        res.status(200).send();
 
     } catch (error) {
         res.status(400).send({
@@ -175,63 +174,23 @@ exports.RESET_PASSWORD = async (req, res) => {
     }
 }
 
-exports.USERONE = async (req, res) => {
+exports.AUTH = async (req, res) => {
 
     try {
+        const user = await Users.findOne({ _id: req.userId });
 
-        const user = await db.collection('users').findOne({ cpf: req.query.cpf });
-
-        if (user) {
-
-            delete user.password;
-            res.status(200).send(
-                {
-                    code: 200,
-                    message: 'success',
-                    data: user
-                }
-            );
-        } else {
-            res.status(404).send({
-                code: 404,
-                message: 'Not Found'
+        if (!user)
+            res.send({
+                code: 400,
+                connection: false,
+                message: 'problems connecting to the session'
             });
-        }
+
+        res.send({ connection: true, user: user });
     } catch (error) {
-        res.status(500).send({
-            message: 'Internal Server Error',
-            code: 500
+        res.status(400).send({
+            message: 'Internal Error - problems connecting to the session',
+            code: 400
         });
     }
-
-};
-
-exports.USERS = async (req, res) => {
-    try {
-
-        let users = await db.collection('users').find().toArray();
-
-        if (users) {
-            users.map(e => { delete e.password; return e; });
-            res.status(200).send(
-                {
-                    user: req.userId,
-                    message: 'success',
-                    code: 200,
-                    data: users
-                }
-            );
-        } else {
-            res.status(404).send({
-                code: 404,
-                message: 'Not Found'
-            });
-        }
-
-    } catch (message) {
-        res.status(500).send({
-            message: 'Internal Server Error',
-            code: 500
-        });
-    }
-};
+}
