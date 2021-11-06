@@ -77,7 +77,11 @@ const UserSchema = new Schema({
             default: Date.now,
          },
       }
-   ]
+   ],
+   permission: {
+      type: String,
+      require: true,
+   },
 });
 
 module.exports = mongoose.model('User', UserSchema);

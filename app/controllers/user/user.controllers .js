@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Users = require('../../models/user');
-const bson = require('bson');
 
+const ObjectID = require("mongodb").ObjectID
 const db = mongoose.connection;
 
 exports.USERONE = async (req, res) => {
@@ -58,6 +58,39 @@ exports.USERS = async (req, res) => {
         }
 
     } catch (message) {
+        res.status(500).send({
+            message: 'Internal Server Error',
+            code: 500
+        });
+    }
+};
+
+exports.UPDATEUSER = async (req, res) => {
+    const userdata = req.body;
+    try {
+
+        const user = await db.collection('users').findOne({ _id: ObjectID(userdata.id) });
+
+        if (!user)
+            res.status(404).send({
+                code: 404,
+                message: 'Not Found'
+            });
+
+        delete userdata.id;
+        delete userdata.password;
+
+        await db.collection('users').updateOne({ _id: user._id }, { $set: userdata });
+
+
+        res.status(200).send(
+            {
+                message: 'success',
+                code: 200,
+            }
+        );
+
+    } catch (error) {
         res.status(500).send({
             message: 'Internal Server Error',
             code: 500

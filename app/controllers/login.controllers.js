@@ -26,6 +26,8 @@ exports.REGISTER = async (req, res) => {
         const user = new Users(req.body);
         const hash = await bcrypt.hash(user.password, 10);
 
+        user.permission = 'common';
+
         delete user.password;
         user.password = hash;
 
@@ -35,7 +37,7 @@ exports.REGISTER = async (req, res) => {
                     {
                         message: 'success',
                         code: 201,
-                        token: generateToken({ id: data._id })
+                        token: generateToken({ id: data._id, permission: data.permission })
                     }
                 );
             }).catch(err => {
@@ -76,7 +78,7 @@ exports.AUTHENTICATE = async (req, res) => {
             {
                 message: 'success',
                 code: 200,
-                token: generateToken({ id: user._id })
+                token: generateToken({ id: user._id, permission: user.permission })
             }
         );
 

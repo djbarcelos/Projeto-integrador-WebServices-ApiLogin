@@ -32,8 +32,8 @@ module.exports = (req, res, next) => {
                 code: 401,
                 message: 'Token invalid'
             });
-
         req.userId = decoded.id;
+        req.userPermission = decoded.permission;
 
         return next();
     })

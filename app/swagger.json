@@ -244,6 +244,62 @@
         }
       }
     },
+    "/update_user": {
+      "put": {
+        "summary": "Atualiza um usuario",
+        "description": "Rota responsavel por atualiza um usuario",
+        "tags": ["Users"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Users"
+              },
+              "examples": {
+                "user": {
+                  "value": {
+                    "id": "Insira um id valido",
+                    "name": "Gabriel Silva",
+                    "birthDate": "01/01/1994",
+                    "cpf": "123.111.320-11",
+                    "email": "gabrieSilva@gmal.com",
+                    "password": "123456",
+                    "phone": "(31)912345678"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "500": {
+            "description": "Internal Server Error "
+          },
+          "400": {
+            "description": "update fail "
+          },
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/mycalls": {
       "get": {
         "summary": "Busca todos os agendamentos do usuario",
@@ -271,7 +327,7 @@
                       "type": "array",
                       "items": {
                         "type": "object",
-                        "$ref": "#/components/schemas/myCalls"
+                        "$ref": "#/components/schemas/MyCalls"
                       }
                     }
                   }
@@ -292,7 +348,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/myCalls"
+                "$ref": "#/components/schemas/MyCalls"
               },
               "examples": {
                 "user": {
@@ -341,7 +397,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/myCalls"
+                "$ref": "#/components/schemas/MyCalls"
               },
               "examples": {
                 "user": {
@@ -356,6 +412,104 @@
         "responses": {
           "400": {
             "description": "Internal Error - register my calls && Problems finding user"
+          },
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/register_collaborator": {
+      "post": {
+        "summary": "Registrar um novo colaborador",
+        "description": "Rota responsavel por registrar um colaborador",
+        "tags": ["Collaborators"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Collaborator"
+              },
+              "examples": {
+                "user": {
+                  "value": {
+                    "specialty": ["medico", "ortopedia"],
+                    "user": ""
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "Internal Error - register collaborator"
+          }
+        }
+      }
+    },
+    "/collaborators": {
+      "get": {
+        "summary": "Lista todos os colaboradores",
+        "description": "Rota responsavel por lista todos os colaboradores",
+        "tags": ["Collaborators"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Collaborator"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/remove_collaborator": {
+      "delete": {
+        "summary": "Remove um usuario da lista de colaboradores",
+        "description": "Rota responsavel por remove um usuario da lista de colaboradores",
+        "tags": ["Collaborators"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Collaborator"
+              },
+              "examples": {
+                "user": {
+                  "value": {
+                    "id": "colocque um id valido"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "Internal Error - remove collaborators && remove fail "
           },
           "200": {
             "description": "success",
@@ -435,7 +589,7 @@
           }
         }
       },
-      "myCalls": {
+      "MyCalls": {
         "type": "array",
         "items": {
           "type": "object",
@@ -463,6 +617,18 @@
                 }
               }
             }
+          }
+        }
+      },
+      "Collaborator": {
+        "type": "object",
+        "properties": {
+          "specialty": {
+            "type": "string"
+          },
+          "user": {
+            "type": "object",
+            "$ref": "#/components/schemas/Users"
           }
         }
       }
